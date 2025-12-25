@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -15,8 +16,14 @@ import { Retail } from './components/Retail';
 import { Campuses } from './components/Campuses';
 import { Warehousing } from './components/Warehousing';
 import { Events } from './components/Events';
+import { IndoorMappingPlatform } from './components/IndoorMappingPlatform';
+import { IndoorNavigation } from './components/IndoorNavigation';
+import { RealTimeTracking } from './components/RealTimeTracking';
+import { AssetTracking } from './components/AssetTracking';
+import { AnalyticsInsights } from './components/AnalyticsInsights';
+import { IntegrationsAPIs } from './components/IntegrationsAPIs';
 
-export type Page = 'home' | 'contact' | 'about' | 'case-studies' | 'blog' | 'airports' | 'healthcare' | 'retail' | 'campuses' | 'warehousing' | 'events';
+export type Page = 'home' | 'contact' | 'about' | 'case-studies' | 'blog' | 'airports' | 'healthcare' | 'retail' | 'campuses' | 'warehousing' | 'events' | 'mapping-platform' | 'navigation-wayfinding' | 'real-time-tracking' | 'asset-tracking' | 'analytics-insights' | 'integrations-apis';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
@@ -98,6 +105,42 @@ export default function App() {
         {currentPage === 'events' && (
           <div className="pt-0 min-h-[80vh]">
             <Events onNavigate={handleNavigate} />
+          </div>
+        )}
+
+        {currentPage === 'mapping-platform' && (
+          <div className="pt-0 min-h-[80vh]">
+            <IndoorMappingPlatform onNavigate={handleNavigate} />
+          </div>
+        )}
+
+        {currentPage === 'navigation-wayfinding' && (
+          <div className="pt-0 min-h-[80vh]">
+            <IndoorNavigation onNavigate={handleNavigate} />
+          </div>
+        )}
+
+        {currentPage === 'real-time-tracking' && (
+          <div className="pt-0 min-h-[80vh]">
+            <RealTimeTracking onNavigate={handleNavigate} />
+          </div>
+        )}
+
+        {currentPage === 'asset-tracking' && (
+          <div className="pt-0 min-h-[80vh]">
+            <AssetTracking onNavigate={handleNavigate} />
+          </div>
+        )}
+
+        {currentPage === 'analytics-insights' && (
+          <div className="pt-0 min-h-[80vh]">
+            <AnalyticsInsights onNavigate={handleNavigate} />
+          </div>
+        )}
+
+        {currentPage === 'integrations-apis' && (
+          <div className="pt-0 min-h-[80vh]">
+            <IntegrationsAPIs onNavigate={handleNavigate} />
           </div>
         )}
       </main>

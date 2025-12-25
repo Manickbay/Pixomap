@@ -1,17 +1,28 @@
+
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { 
+  Menu, 
+  X, 
+  ChevronDown, 
+  Map, 
+  Navigation, 
+  Zap, 
+  Package, 
+  BarChart3, 
+  Code2, 
+  ArrowRight 
+} from 'lucide-react';
 import { Button } from './Button';
 
 interface NavbarProps {
-  currentPage?: 'home' | 'contact' | 'about' | 'case-studies' | 'blog' | 'airports' | 'healthcare' | 'retail' | 'campuses' | 'warehousing' | 'events';
-  onNavigate?: (page: 'home' | 'contact' | 'about' | 'case-studies' | 'blog' | 'airports' | 'healthcare' | 'retail' | 'campuses' | 'warehousing' | 'events') => void;
+  currentPage?: 'home' | 'contact' | 'about' | 'case-studies' | 'blog' | 'airports' | 'healthcare' | 'retail' | 'campuses' | 'warehousing' | 'events' | 'mapping-platform' | 'navigation-wayfinding' | 'real-time-tracking' | 'asset-tracking' | 'analytics-insights' | 'integrations-apis';
+  onNavigate?: (page: 'home' | 'contact' | 'about' | 'case-studies' | 'blog' | 'airports' | 'healthcare' | 'retail' | 'campuses' | 'warehousing' | 'events' | 'mapping-platform' | 'navigation-wayfinding' | 'real-time-tracking' | 'asset-tracking' | 'analytics-insights' | 'integrations-apis') => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ currentPage = 'home', onNavigate = (_: 'home' | 'contact' | 'about' | 'case-studies' | 'blog' | 'airports' | 'healthcare' | 'retail' | 'campuses' | 'warehousing' | 'events') => {} }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentPage = 'home', onNavigate = (_: any) => {} }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Monitor scroll for visual depth
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -20,9 +31,54 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage = 'home', onNavigate
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const productLinks = [
+    { 
+      title: 'Indoor Mapping Platform', 
+      subtext: 'Create Accurate Indoor Maps at Scale', 
+      icon: Map,
+      color: 'bg-brand/5 text-brand',
+      page: 'mapping-platform'
+    },
+    { 
+      title: 'Indoor Navigation & Wayfinding', 
+      subtext: 'Seamless Navigation Inside Large Spaces', 
+      icon: Navigation,
+      color: 'bg-brand/5 text-brand',
+      page: 'navigation-wayfinding'
+    },
+    { 
+      title: 'Real-Time Location Tracking', 
+      subtext: 'Live Visibility Within Indoor Spaces', 
+      icon: Zap,
+      color: 'bg-brand/5 text-brand',
+      page: 'real-time-tracking'
+    },
+    { 
+      title: 'Asset Tracking & Management', 
+      subtext: 'Know Where Your Assets Are — Always', 
+      icon: Package,
+      color: 'bg-brand/5 text-brand',
+      page: 'asset-tracking'
+    },
+    { 
+      title: 'Analytics & Insights', 
+      subtext: 'Turn Indoor Movement into Actionable Data', 
+      icon: BarChart3,
+      color: 'bg-brand/5 text-brand',
+      page: 'analytics-insights'
+    },
+    { 
+      title: 'Integrations & APIs', 
+      subtext: 'Built to Integrate with Enterprise Systems', 
+      icon: Code2,
+      color: 'bg-brand/5 text-brand',
+      page: 'integrations-apis'
+    },
+  ];
+
   const navLinks = [
     { name: 'Home', href: '#', hasDropdown: false },
-    { name: 'Products', href: '#products', hasDropdown: true },
+    { name: 'Products', href: '#products', hasDropdown: true, isMega: true },
     { 
       name: 'Industries', 
       href: '#industries', 
@@ -87,6 +143,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage = 'home', onNavigate
     }
   };
 
+  const handleProductClick = (e: React.MouseEvent, prod: any) => {
+    e.preventDefault();
+    setIsOpen(false);
+    if (prod.page) {
+      onNavigate(prod.page as any);
+    }
+  };
+
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
@@ -112,11 +176,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage = 'home', onNavigate
                 <a 
                   href={item.href} 
                   onClick={(e) => handleLinkClick(e, item)}
-                  className={`text-sm transition-colors font-medium flex items-center gap-1 py-2 ${
+                  className={`text-sm transition-colors font-medium flex items-center gap-1 py-4 ${
                     (item.name === 'Contact Us' && currentPage === 'contact') || 
                     (item.name === 'About' && currentPage === 'about') ||
                     (item.name === 'Industries' && ['airports', 'healthcare', 'retail', 'campuses', 'warehousing', 'events'].includes(currentPage)) ||
-                    (item.name === 'Resources' && (currentPage === 'case-studies' || currentPage === 'blog'))
+                    (item.name === 'Resources' && (currentPage === 'case-studies' || currentPage === 'blog')) ||
+                    (item.name === 'Products' && (currentPage === 'mapping-platform' || currentPage === 'navigation-wayfinding' || currentPage === 'real-time-tracking' || currentPage === 'asset-tracking' || currentPage === 'analytics-insights' || currentPage === 'integrations-apis'))
                       ? 'text-brand font-semibold' 
                       : 'text-slate-600 hover:text-brand'
                   }`}
@@ -127,9 +192,35 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage = 'home', onNavigate
                   )}
                 </a>
 
-                {/* Desktop Dropdown Menu */}
-                {item.dropdownItems && (
-                  <div className="absolute top-full left-0 pt-4 w-56 opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 ease-out">
+                {/* Products Mega Menu */}
+                {item.isMega && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[720px] opacity-0 translate-y-4 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]">
+                    <div className="bg-white border border-slate-200 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col">
+                      <div className="grid grid-cols-2 gap-2 p-6">
+                        {productLinks.map((prod, i) => (
+                          <a 
+                            key={i} 
+                            href="#" 
+                            onClick={(e) => handleProductClick(e, prod)}
+                            className="flex items-start gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-all duration-300 group/item"
+                          >
+                            <div className={`w-12 h-12 shrink-0 rounded-xl flex items-center justify-center transition-all duration-300 ${prod.color} group-hover/item:scale-110 group-hover/item:shadow-lg`}>
+                              <prod.icon size={24} strokeWidth={2.5} />
+                            </div>
+                            <div className="flex flex-col gap-1 overflow-hidden">
+                              <span className="font-bold text-slate-900 text-[15px] group-hover/item:text-brand transition-colors whitespace-nowrap">{prod.title}</span>
+                              <span className="text-sm text-slate-500 leading-snug">{prod.subtext}</span>
+                            </div>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Standard Dropdown Menu */}
+                {!item.isMega && item.dropdownItems && (
+                  <div className="absolute top-full left-0 pt-2 w-56 opacity-0 translate-y-4 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 ease-out">
                     <div className="bg-white border border-slate-200 rounded-2xl p-2 shadow-2xl overflow-hidden">
                       {item.dropdownItems.map((subItem) => (
                         <a 
@@ -143,7 +234,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage = 'home', onNavigate
                             (subItem === 'Campuses' && currentPage === 'campuses') ||
                             (subItem === 'Warehousing' && currentPage === 'warehousing') ||
                             (subItem === 'Events' && currentPage === 'events')
-                            ? 'text-brand bg-brand/5 pl-6'
+                            ? 'text-brand bg-brand/5 pl-6 font-bold'
                             : 'text-slate-600 hover:text-brand hover:bg-brand/5 hover:pl-6'
                           }`}
                         >
@@ -187,18 +278,36 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage = 'home', onNavigate
                     (item.name === 'Contact Us' && currentPage === 'contact') ||
                     (item.name === 'About' && currentPage === 'about') ||
                     (item.name === 'Industries' && ['airports', 'healthcare', 'retail', 'campuses', 'warehousing', 'events'].includes(currentPage)) ||
-                    (item.name === 'Resources' && (currentPage === 'case-studies' || currentPage === 'blog'))
+                    (item.name === 'Resources' && (currentPage === 'case-studies' || currentPage === 'blog')) ||
+                    (item.name === 'Products' && (currentPage === 'mapping-platform' || currentPage === 'navigation-wayfinding' || currentPage === 'real-time-tracking' || currentPage === 'asset-tracking' || currentPage === 'analytics-insights' || currentPage === 'integrations-apis'))
                     ? 'text-brand' 
                     : 'text-slate-700'
                   }`}
-                  onClick={(e) => !item.dropdownItems && handleLinkClick(e, item)}
+                  onClick={(e) => !item.dropdownItems && !item.isMega && handleLinkClick(e, item)}
                 >
                   {item.name}
                   {item.hasDropdown && <ChevronDown size={16} />}
                 </a>
                 
-                {/* Mobile Submenu */}
-                {item.dropdownItems && (
+                {/* Mobile Submenu for Products */}
+                {item.isMega && (
+                  <div className="pl-4 flex flex-col gap-3 mb-4 mt-2 border-l-2 border-slate-100 ml-1">
+                    {productLinks.map((prod, idx) => (
+                      <div key={idx} className="flex items-start gap-3" onClick={(e) => handleProductClick(e, prod)}>
+                        <div className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center ${prod.color}`}>
+                           <prod.icon size={16} />
+                        </div>
+                        <div className="flex flex-col">
+                           <span className="text-sm font-bold text-slate-800">{prod.title}</span>
+                           <span className="text-xs text-slate-500">{prod.subtext}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Mobile Submenu for standard dropdowns */}
+                {!item.isMega && item.dropdownItems && (
                   <div className="pl-4 flex flex-col gap-1 mb-3 border-l-2 border-slate-100 ml-1">
                     {item.dropdownItems.map((subItem) => (
                       <a 
